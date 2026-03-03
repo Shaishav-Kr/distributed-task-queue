@@ -214,16 +214,19 @@ def flask_client():
 
 class TestSendEmailTask:
     def test_email_task_returns_success(self, celery_eager_mode):
-        result = send_email_task.delay("test@example.com", "Test Subject", "Hello.")
-        output = result.get()
+        # Patch random to always return 0.5 — prevents the simulated 20% failure
+        with patch("celery_worker.random.random", return_value=0.5):
+            result = send_email_task.delay("test@example.com", "Test Subject", "Hello.")
+            output = result.get()
         assert output["status"] == "sent"
         assert output["recipient"] == "test@example.com"
         assert output["subject"] == "Test Subject"
         assert "message" in output
 
     def test_email_task_with_different_recipients(self, celery_eager_mode):
-        result = send_email_task.delay("another@test.com", "Another Test", "Body")
-        output = result.get()
+        with patch("celery_worker.random.random", return_value=0.5):
+            result = send_email_task.delay("another@test.com", "Another Test", "Body")
+            output = result.get()
         assert output["recipient"] == "another@test.com"
 
 
