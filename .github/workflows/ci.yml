@@ -1,68 +1,13 @@
-# # .github/workflows/ci.yml
-# #
-# # GitHub Actions CI Pipeline
-# # This runs automatically every time you push code to GitHub.
-# #
-# # It will:
-# # 1. Install dependencies
-# # 2. Start Redis (needed for integration tests)
-# # 3. Run all PyTest tests
-# # 4. Report pass/fail
-
-# name: CI - Test & Lint
-
-# on:
-#   push:
-#     branches: [ main, master ]
-#   pull_request:
-#     branches: [ main, master ]
-
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
-
-#     # Spin up a Redis service container alongside the test runner
-#     services:
-#       redis:
-#         image: redis:7-alpine
-#         ports:
-#           - 6379:6379
-#         options: >-
-#           --health-cmd "redis-cli ping"
-#           --health-interval 10s
-#           --health-timeout 5s
-#           --health-retries 5
-
-#     steps:
-#       # Step 1: Checkout the code
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-
-#       # Step 2: Set up Python
-#       - name: Set up Python 3.11
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: "3.11"
-
-#       # Step 3: Cache pip packages (speeds up subsequent runs)
-#       - name: Cache pip packages
-#         uses: actions/cache@v3
-#         with:
-#           path: ~/.cache/pip
-#           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-
-#       # Step 4: Install dependencies
-#       - name: Install dependencies
-#         run: |
-#           python -m pip install --upgrade pip
-#           pip install -r requirements.txt
-
-#       # Step 5: Run tests with coverage report
-#       - name: Run tests
-#         run: |
-#           pytest tests/ -v --tb=short --cov=app --cov-report=term-missing
-#         env:
-#           REDIS_URL: redis://localhost:6379/0
+# .github/workflows/ci.yml
+#
+# GitHub Actions CI Pipeline
+# This runs automatically every time you push code to GitHub.
+#
+# It will:
+# 1. Install dependencies
+# 2. Start Redis (needed for integration tests)
+# 3. Run all PyTest tests
+# 4. Report pass/fail
 
 name: CI - Test & Lint
 
@@ -76,6 +21,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    # Spin up a Redis service container alongside the test runner
     services:
       redis:
         image: redis:7-alpine
@@ -88,27 +34,32 @@ jobs:
           --health-retries 5
 
     steps:
+      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Set up Python
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
+      # Step 3: Cache pip packages (speeds up subsequent runs)
       - name: Cache pip packages
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
 
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # Step 5: Run tests with coverage report
       - name: Run tests
         run: |
-          pytest tests/ -v --tb=short --cov=. --cov-omit="tests/*" --cov-report=term-missing
+          pytest tests/ -v --tb=short --cov=app --cov-report=term-missing
         env:
           REDIS_URL: redis://localhost:6379/0
