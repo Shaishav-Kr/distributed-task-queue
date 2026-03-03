@@ -74,7 +74,7 @@ distributed-task-queue/
 
 ```bash
 # Clone the repo
-git clone https://github.com/YOUR_USERNAME/distributed-task-queue.git
+git clone https://github.com/Shaishav-Kr/distributed-task-queue.git
 cd distributed-task-queue
 
 # Start everything (Redis + Flask + Celery Worker + Flower)
