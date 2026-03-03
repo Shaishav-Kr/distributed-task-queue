@@ -2,7 +2,7 @@
 
 A production-ready background job processing system built with **Python**, **Flask**, **Celery**, **Redis**, and **Docker**.
 
-[![CI](https://github.com/YOUR_USERNAME/distributed-task-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/distributed-task-queue/actions)
+[![CI](https://github.com/Shaishav-Kr/distributed-task-queue/actions/workflows/ci.yml/badge.svg)](https://github.com/Shaishav-Kr/distributed-task-queue/actions)
 
 ---
 
